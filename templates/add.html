@@ -1,0 +1,29 @@
+
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/sign.css">
+{% endblock%}
+
+
+{% block body %}
+<form action="{{url_for('add',id=id)}}" method="post">
+    <label for="nameP">Name Product</label><br>
+    <input type="text" name="nameP" value="value"><br>
+
+    <label for="qty">Quantity</label><br>
+    <input type="number" name="qty" value="value"><br>
+
+    <label for="price">Price</label><br>
+    <input type="number" name="price" step="0.01" value="value"><br>
+
+    <label for="category">Category</label><br>
+    <input type="text" name="category" value="value"><br>
+
+    <label for="date">Date</label><br>
+    <input type="date" name="date"><br>
+    <button>הוסף קניה</button>
+    {% if error %}
+    <p>{{error}}</p>
+    {% endif %}
+</form>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="../static/css/base.css">
+  <title>HomeTrack</title>
+  {% block head %}
+  {% endblock%}
+</head>
+
+<body>
+  <!-- סרגל כלים -->
+  <nav>
+    <div>
+      <h2>HomeTrack</h2>
+      <img class="logo-img" src="../static/images/logo-black.gif" alt="GIF">
+    </div>
+    <div>
+      <h3 class="profile"><a href="/signout">Sign Out</a></h3>
+      <h3><a href="/">Home</a></h3>
+      <h3><a href="/signin">Sign in</a></h3>
+      <h3><a href="/signup">Sign Up</a></h3>
+    </div>
+  </nav>
+  <!-- ----------- -->
+
+  {% block body %}
+  <div class="content">
+    <img src="../static/images/logo-black.gif" alt="GIF">
+    <h1>Home shopping savings app</h1>
+  </div>
+  {% endblock %}
+</body>
+
+</html>

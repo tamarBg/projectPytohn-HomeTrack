@@ -1,0 +1,85 @@
+body{
+  background-color:#212121;
+  font-family: 'Roboto',sans-serif;
+  font-weight:100;
+  margin:auto;
+}
+.nav-profile{
+  display: none;
+}
+/* סרגל כלים */
+nav { 
+  display: flex; /* גמישות התצוגה */  
+  justify-content: space-between;
+  background: hwb(222deg 18.43% 73.73%); /* רקע */  
+  padding: 10px 20px; /* ריפוד */
+}
+nav div{
+  display: flex;
+}
+/* סרגל כלים-קישורים */
+nav h3 a{
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+nav h3 a:hover{
+  text-decoration: none;
+}
+h1{
+  color: white;
+  font-weight: normal;
+  font-size: 50px;
+}
+p{
+  font-weight: 100;
+}
+.content{
+  display: flex; /* גמישות התצוגה */  
+  flex-direction: column;
+  align-items: center;
+
+}
+.content img{
+  width: 300px;
+}
+.logo-img{
+  display: none;
+}
+.profile{
+  display: none;
+}
+
+
+@font-face{
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Black.ttf')format('ttf');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face{
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Bold.ttf')format('ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face{
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Regular.ttf')format('ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face{
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-Thin.ttf')format('ttf');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face{
+  font-family: 'Roboto';
+  src: url('fonts/Roboto-ExtraLightItalic.ttf')format('ttf');
+  font-weight: 200;
+  font-style: normal;
+}
+
+

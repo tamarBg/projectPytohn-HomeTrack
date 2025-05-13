@@ -1,0 +1,88 @@
+nav{
+  display: none;
+}
+.nav-profile{
+  display: flex;
+  background-color: rgb(142, 20, 20);
+ 
+}
+#wellcom-user{
+    background-color: #212121;
+    color: rgb(142, 20, 20);
+    border-radius: 3px;
+    padding: 2px;
+
+}
+.yourPurchases-title{
+    display: flex;
+    justify-content: center;
+    color: white;
+}
+.profile{
+    display: flex;
+}
+.logo-img{
+  display: flex;
+   height: 40px;
+   padding: 8px;
+}
+table{
+    /* background-color: aliceblue; */
+    margin: auto;
+    padding: 1%;
+    border-radius: 5px;
+    /* margin-top: 30px; */
+}
+thead{
+    background-color: white;
+}
+tbody{
+    background-color: white;
+}
+th{
+    border-radius: 2px;
+    padding: 20px;
+}
+td{
+    border-radius: 2px;
+    padding: 10px;
+}
+.links{
+    color: white;
+    margin-top: 30px;
+}
+.links a{
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(15, 61, 0);
+    color: #ffffff;
+    width: 100px;
+    margin: auto;
+    border-radius: 5px;
+    padding: 15px;
+}
+.links a:hover{
+    background-color: rgba(15, 61, 0, 0.455);
+}
+.div-links{
+    display: flex;
+    justify-content: space-between;
+}
+.orderBy-link{
+    display: flex;
+    justify-content: center;
+}
+.orderBy-link a{
+    text-decoration: none;
+    color: white;
+    background-color: blue;
+    padding: 5px;
+    margin: 0;
+}
+
+p{
+    display: flex;
+    justify-content: center;
+    color: white;
+}

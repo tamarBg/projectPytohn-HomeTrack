@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/profile.css">
+{% endblock%}
+
+
+{% block body %}
+<nav class="nav-profile">
+    <div>
+        <h2>HomeTrack</h2>
+        <img class="logo-img" src="../static/images/logo-black.gif" alt="GIF">
+    </div>
+    <div>
+        <h3 id="wellcom-user" class="profile">Wellcom {{user.name}}</h3>
+        <h3 class="profile"><a href="/signout">Sign Out</a></h3>
+        <h3><a href="/">Home</a></h3>
+        <h3><a href="/signin">Sign in</a></h3>
+        <h3><a href="/signup">Sign Up</a></h3>
+    </div>
+</nav>
+
+{% if purchases|length < 1 %} <p>אין לך רכישות</p>
+    {% else %}
+    <h2 class="yourPurchases-title">הרכישות שלך</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>שם המוצר</th>
+                <th>כמות</th>
+                <th>מחיר</th>
+                <th>קטגוריה</th>
+                <th>תאריך</th>
+                <th>מחק</th>
+            </tr>
+        </thead>
+
+        {% for p in purchases: %}
+        <tbody>
+            <tr>
+                <td>{{ p.nameP}}</td>
+                <td>{{ p.qty }}</td>
+                <td>{{ p.price }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.date.date() }}</td>
+                <td><a href="#">מחיקה</a></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% endif %}
+         {% if flag==1 %}
+        <p class="orderBy-link"><a href="/profile2/{{user.id}}">{{message}}</a><p>
+        {% else %}
+        <p class="orderBy-link"><a href="/profile/{{user.id}}">{{message}}</a></p>
+        {% endif %}
+    <div class="div-links">
+        <h2 class="links"><a href="{{url_for('add',id=user.id)}}">הוסף קניה</a></h2>
+        <h2 class="links"><a href="/saveData/{{user.id}}">גיבוי</a></h2>
+   
+        <h2 class="links"><a href="/graph1">Graph1</a></h2>
+        <h2 class="links"><a href="/graph2">Graph2</a></h2>
+        <h2 class="links"><a href="/Shopping_cart/{{user.id}}">יעול קניות</a></h2>
+        <!-- <h2 class="links"><a href="/demoProfile/{{user.id}}">דוגמא</a></h2> -->
+    </div>
+
+    {% endblock %}

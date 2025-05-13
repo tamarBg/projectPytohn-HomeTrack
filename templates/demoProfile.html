@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+{% block head %}
+<link rel="stylesheet" href="../static/css/demoProfile.css">
+{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>פרופיל הדגמה</title>
+</head>
+<body>
+    <h3>איזור אישי לדוגמה</h3>
+    <p>רשימת רכישות מהשבוע האחרון</p>
+    <table>
+        <thead>
+            <tr>
+                <th>שם מוצר</th>
+                <th>כמות</th>
+                <th>מחיר</th>
+                <th>קטגוריה</th>
+                <th>תאריך</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in purchases %}
+            <tr>
+                <td>{{ item['שם מוצר'] }}</td>
+                <td>{{ item['כמות'] }}</td>
+                <td>{{ item['מחיר'] }}</td>
+                <td>{{ item['קטגוריה'] }}</td>
+                <td>{{ item['תאריך'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="/signup">הצטרף עכשיו כדי להשתמש באפליקציה המלאה</a>
+    <a href="/signup"><button>חזור</button></a>
+</body>
+</html>
+{% endblock %}

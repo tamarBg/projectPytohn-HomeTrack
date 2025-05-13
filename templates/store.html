@@ -1,0 +1,91 @@
+<!-- store.html -->
+<html>
+
+<body>
+    <link rel="stylesheet" href="../static/css/base.css">
+    <link rel="stylesheet" href="../static/css/store.css">
+    <link rel="stylesheet" href="../static/css/demoProfile.css">
+    <h2>{{ to_print }}</h2>
+
+    {% if better_deals.empty %}
+    <p>לא נמצאו הצעות זולות יותר.</p>
+    {% else %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>שם מוצר</th>
+                <th>כמות</th>
+                <th>מחיר שקנית</th>
+                <th>מחיר בחנות</th>
+                <th>קטגוריה</th>
+                <th>תאריך רכישה</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for _, row in better_deals.iterrows() %}
+            <tr>
+                <td>{{ row['name'] }}</td>
+                <td>{{ row['qty'] }}</td>
+                <td>{{ row['price'] }}</td>
+                <td>{{ row['store_price'] }}</td>
+                <td>{{ row['category'] }}</td>
+                <td>{{ row['date'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <a href="{{url_for('profile',id=id)}}">חזרה לדף הבית</a>
+
+    <div class="product">
+        <span class="name">כדור</span>
+        <span class="price">55.00</span>
+    </div>
+    <div class="product">
+        <span class="name">בובה</span>
+        <span class="price">100.00</span>
+    </div>
+    <div class="product">
+        <span class="name">לגו</span>
+        <span class="price">150.00</span>
+    </div>
+    <div class="product">
+        <span class="name">מחברת</span>
+        <span class="price">10.00</span>
+    </div>
+    <div class="product">
+        <span class="name">ספר</span>
+        <span class="price">80.00</span>
+    </div>
+    <div class="product">
+        <span class="name">פאזל</span>
+        <span class="price">45.00</span>
+    </div>
+    <div class="product">
+        <span class="name">בלונים</span>
+        <span class="price">0.85</span>
+    </div>
+    <div class="product">
+        <span class="name">מדבקות</span>
+        <span class="price">12.50</span>
+    </div>
+    <div class="product">
+        <span class="name">צעצוע אמבטיה</span>
+        <span class="price">25.00</span>
+    </div>
+    <div class="product">
+        <span class="name">ערכת יצירה</span>
+        <span class="price">60.00</span>
+    </div>
+    <div class="product">
+        <span class="name">ערכת מדע</span>
+        <span class="price">110.00</span>
+    </div>
+    <div class="product">
+        <span class="name">משחק קופסה</span>
+        <span class="price">85.00</span>
+    </div>
+
+</body>
+
+</html>

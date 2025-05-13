@@ -1,0 +1,24 @@
+{% block head %}
+<link rel="stylesheet" href="../static/css/sign.css">
+{% endblock %}
+
+
+{% block body %}
+<img src="../static/images/logo-black.gif" alt="">
+<h1>Sign in to HomeTrack</h1>
+
+<form action="/signin" method="post">
+    <label for="email">Email</label><br>
+    <input type="email" name="email" required value="{{form_data.email}}"><br>
+    <label for="password">Password</label><br>
+    <input type="password" name="password" required value="{{form_data.password}}"><br>
+    {% if error %}
+    <p>{{error}}</p>
+    {% endif %}
+    <button>Sign In</button>
+</form>
+
+<nav class="nav-bottom">
+    <p>New to HomeTrack? <a href="/signup">Create an account</a></p>
+</nav>
+{% endblock %}

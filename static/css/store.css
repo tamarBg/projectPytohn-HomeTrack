@@ -1,0 +1,30 @@
+.product{
+    display: none;
+}
+
+table{
+    /* background-color: aliceblue; */
+    margin: auto;
+    padding: 1%;
+    border-radius: 5px;
+    /* margin-top: 30px; */
+}
+thead{
+    background-color: white;
+}
+tbody{
+    background-color: white;
+}
+th{
+    border-radius: 2px;
+    padding: 20px;
+}
+td{
+    border-radius: 2px;
+    padding: 10px;
+}
+h2,h3,p,a{
+    display: flex;
+    justify-content: center;
+    color: white;
+}

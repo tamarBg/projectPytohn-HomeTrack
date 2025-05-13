@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>גיבוי הצליח</title>
+</head>
+<body>
+    <h3>הגיבוי נשמר בהצלחה!</h3>
+    <p>הקובץ שמור בשם: <strong>{{ filepath }}</strong></p>
+    <a href="/downloadData"><button>הורד את הקובץ</button></a>
+    <a href="{{url_for('profile',id=id)}}"><button>חזור</button></a>
+</body>
+</html>
