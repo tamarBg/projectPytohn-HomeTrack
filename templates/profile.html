@@ -43,25 +43,44 @@
                 <td>{{ p.price }}</td>
                 <td>{{ p.category }}</td>
                 <td>{{ p.date.date() }}</td>
+                {% if message == "תצוגת דמו"%}
                 <td><a href="#">מחיקה</a></td>
+                {% else %}
+                <td><a href="/delete/{{user.id}}/{{p.id}}">מחיקה</a></td>
+                {% endif %}
+
             </tr>
         </tbody>
         {% endfor %}
     </table>
-    {% endif %}
-         {% if flag==1 %}
-        <p class="orderBy-link"><a href="/profile2/{{user.id}}">{{message}}</a><p>
+    {% if message == "תצוגת דמו" %}
+    <p class="orderBy-link"><a href="#">{{message}}</a>
+        {% elif flag==1 %}
+    <p class="orderBy-link"><a href="/profile2/{{user.id}}">{{message}}</a>
+    <p>
         {% else %}
-        <p class="orderBy-link"><a href="/profile/{{user.id}}">{{message}}</a></p>
-        {% endif %}
+    <p class="orderBy-link"><a href="/profile/{{user.id}}">{{message}}</a></p>
+    {% endif %}
+    {% endif %}
+
+
+    {% if message=="תצוגת דמו" %}
+    <h2 id="addPurchase" class="links"><a href="/add/9000">הוספת רכישה</a></h2>
     <div class="div-links">
-        <h2 class="links"><a href="{{url_for('add',id=user.id)}}">הוסף קניה</a></h2>
+        <h2 class="links"><a href="/saveData/9000">גיבוי</a></h2>
+
+        <h2 class="links"><a href="/graph1">Graph1</a></h2>
+        <h2 class="links"><a href="/graph2">Graph2</a></h2>
+        <h2 class="links"><a href="/Shopping_cart/9000">יעול קניות</a></h2>
+    </div>
+    {% else %}
+    <h2 id="addPurchase" class="links"><a href="{{url_for('add',id=user.id)}}">הוספת רכישה</a></h2>
+    <div class="div-links">
         <h2 class="links"><a href="/saveData/{{user.id}}">גיבוי</a></h2>
-   
+
         <h2 class="links"><a href="/graph1">Graph1</a></h2>
         <h2 class="links"><a href="/graph2">Graph2</a></h2>
         <h2 class="links"><a href="/Shopping_cart/{{user.id}}">יעול קניות</a></h2>
-        <!-- <h2 class="links"><a href="/demoProfile/{{user.id}}">דוגמא</a></h2> -->
     </div>
-
+    {% endif %}
     {% endblock %}

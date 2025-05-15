@@ -72,11 +72,6 @@ def signin():
         return render_template('signin.html',error=error,form_data=form_data)
     else:   
         return redirect(url_for('profile',id=existing_email.id))
-
-@app.route('/signout')
-def signout():
-    return redirect('/')
-
 @app.route('/profile/<id>')
 def profile(id):
     flag=1
@@ -93,18 +88,46 @@ def profile2(user_id):
     purchases=Purchase.query.filter_by(user_id=user_id).order_by(Purchase.date.asc()).all()
     return render_template('profile.html',user=user,purchases=purchases,message=message,flag=flag)
 
+@app.route('/signout')
+def signout():
+    return redirect('/')
+
 @app.route('/add/<id>',methods=['GET','POST'])
 def add(id):
     if request.method=='GET':
         return render_template('add.html',id=id)
+
     nameP=request.form['nameP']
     qty=request.form['qty']
     price=request.form['price']
     category=request.form['category']
     date_str=request.form['date']
     date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else datetime.now()
-    new_purchase=Purchase(user_id=id,nameP=nameP,qty=qty,price=price,category=category,date=date)
-    db.session.add(new_purchase)
+ 
+    purchases=[]
+
+    if id == '9000':
+        # כל פעם שמוסיפים:
+        new_purchase = Purchase(
+            user_id=1,
+            nameP=nameP,
+            qty=qty,
+            price=price,
+            category=category,
+            date=date
+        )
+        purchases.append(new_purchase)
+        return redirect(url_for('demoProfile.html',purchases=purchases))
+    else:
+        new_purchase=Purchase(user_id=id,nameP=nameP,qty=qty,price=price,category=category,date=date)
+        db.session.add(new_purchase)
+        db.session.commit()
+        return redirect(url_for('profile',id=id))
+
+@app.route('/delete/<id>/<p_id>')
+def delete(id,p_id):
+    purchase = Purchase.query.get_or_404(p_id)
+    db.session.delete(purchase)
     db.session.commit()
     return redirect(url_for('profile',id=id))
 
@@ -224,17 +247,42 @@ def demo_profile():
     days_ago = np.random.randint(0, 7, size=num_records)
     dates = [datetime.today() - timedelta(days=int(d)) for d in days_ago]
     dates = [d.strftime('%Y-%m-%d') for d in dates]
-       # יצירת DataFrame עם pandas
-    df = pd.DataFrame({
-        'שם מוצר': names,
-        'כמות': qtys,
-        'מחיר': prices,
-        'קטגוריה': categories,
-        'תאריך': dates
+        # יצירת DataFrame עם הנתונים הדינמיים
+    extra_data = pd.DataFrame({
+        'user_id': 1,
+        'nameP': names,
+        'qty': qtys,
+        'price': prices,
+        'category': categories,
+        'date': dates
     })
 
+    # המרת רשומות הדמה למילונים והוספתם ל-data
+    for _, row in extra_data.iterrows():
+        data.append({
+            'user_id': row['user_id'],
+            'nameP': row['nameP'],
+            'qty': row['qty'],
+            'price': row['price'],
+            'category': row['category'],
+            'date': row['date']
+        })
+
+    # המרה לאובייקטי Purchase (רק לצורך תצוגה, לא מוסיפים לדאטאבייס)
+    purchases = [Purchase(
+        user_id=record['user_id'],
+        nameP=record['nameP'],
+        qty=record['qty'],
+        price=record['price'],
+        category=record['category'],
+        date=datetime.strptime(record['date'], '%Y-%m-%d')
+    ) for record in data]
+
+    # יצירת משתמש דמה
+    user = User(id=1, name="משתמשת הדגמה", email="demo@example.com", password="1234")
+
+    return render_template('profile.html', user=user, purchases=purchases, message="תצוגת דמו", flag=1)
     # הצגת הנתונים בטמפלט
-    return render_template('demoProfile.html', purchases=df.to_dict(orient='records'))
 
 
 
@@ -268,19 +316,6 @@ def Shopping_cart(id):
     better_deals = merged[merged['store_price'] < merged['price']]
     to_print="מוצרים שהחנות מציעה במחיר זול יותר"
     return render_template('store.html',better_deals=better_deals,to_print=to_print,id=id)
-
-
-# # תוצאה: הדפסת המוצרים שבהם ניתן לחסוך
-# print("💡 מוצרים שהחנות מציעה במחיר זול יותר:")
-# print(better_deals)
-
-# url = 'https://example.com/store'  # כתובת אמיתית של דף מוצרים
-# response = requests.get(url)
-# soup = BeautifulSoup(response.text, 'html.parser')
-
-# המשך כמו קודם – שליפת שמות ומחירים
-
-
 
 if __name__== "__main__":  # הרצת האפליקציה
     app.run(debug=True)

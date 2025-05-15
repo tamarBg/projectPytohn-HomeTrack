@@ -60,7 +60,7 @@ td{
     width: 100px;
     margin: auto;
     border-radius: 5px;
-    padding: 15px;
+    padding: 10px;
 }
 .links a:hover{
     background-color: rgba(15, 61, 0, 0.455);
@@ -85,4 +85,13 @@ p{
     display: flex;
     justify-content: center;
     color: white;
+}
+#addPurchase a{
+    background-color: rgb(121, 121, 121);
+    color: black;
+    width: 200px;
+    padding: 20px 20px;
+}
+#addPurchase a:hover{
+    background-color: rgba(121, 121, 121, 0.705);
 }

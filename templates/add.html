@@ -8,16 +8,16 @@
 {% block body %}
 <form action="{{url_for('add',id=id)}}" method="post">
     <label for="nameP">Name Product</label><br>
-    <input type="text" name="nameP" value="value"><br>
+    <input type="text" name="nameP" required><br>
 
     <label for="qty">Quantity</label><br>
-    <input type="number" name="qty" value="value"><br>
+    <input type="number" name="qty" required><br>
 
     <label for="price">Price</label><br>
-    <input type="number" name="price" step="0.01" value="value"><br>
+    <input type="number" name="price" step="0.01" required><br>
 
     <label for="category">Category</label><br>
-    <input type="text" name="category" value="value"><br>
+    <input type="text" name="category" required><br>
 
     <label for="date">Date</label><br>
     <input type="date" name="date"><br>

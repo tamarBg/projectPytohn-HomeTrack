@@ -7,9 +7,11 @@ table{
 }
 thead{
     background-color: white;
+    color: black;
 }
 tbody{
     background-color: white;
+    color: black;
 }
 th{
     border-radius: 2px;
