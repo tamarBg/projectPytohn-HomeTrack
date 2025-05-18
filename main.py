@@ -20,9 +20,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # עכשיו מקשרים את db לאפליקציה
 db.init_app(app)
-# with app.app_context():
-#     db.drop_all()  # מוחק את כל הטבלאות
-#     db.create_all()  # יוצר את הטבלאות מחדש
+with app.app_context():
+    db.drop_all()  # מוחק את כל הטבלאות
+    db.create_all()  # יוצר את הטבלאות מחדש
     
 @app.route('/')
 def index():
