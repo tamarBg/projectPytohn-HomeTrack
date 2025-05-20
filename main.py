@@ -21,7 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # עכשיו מקשרים את db לאפליקציה
 db.init_app(app)
 with app.app_context():
-    db.drop_all()  # מוחק את כל הטבלאות
+    # db.drop_all()  # מוחק את כל הטבלאות
     db.create_all()  # יוצר את הטבלאות מחדש
     
 @app.route('/')
@@ -143,7 +143,7 @@ def save_data(id):
         'Date': p.date.strftime("%Y-%m-%d")
     }for p in purchases]
     df=pd.DataFrame(data)
-    file_path = 'backup.csv'
+    file_path = os.path.join(app.root_path, 'backup.csv')
     df.to_csv(file_path, index=False)
 
     # שדרוג: הצגת משוב
@@ -162,69 +162,105 @@ def download_data():
 
 @app.route('/graph1')
 def graph1():
-    purchases=Purchase.query.all()
-    data=[{
-        'user_id': p.user_id,
-        'nameP': p.nameP,
-        'qty': p.qty,
-        'price': p.price,
-        'category': p.category,
-        'date': p.date.strftime("%Y-%m-%d")
-    }for p in purchases]
-    df=pd.DataFrame(data)
-        # סכום לפי קטגוריה
-    category_sum = df.groupby('category')['qty'].sum()
-        # יצירת הגרף
-    plt.figure(figsize=(6, 6))
-    category_sum.plot.pie(autopct='%1.1f%%', startangle=90)
-    plt.title('התפלגות הוצאות לפי קטגוריה')
-    plt.ylabel('')  # בלי תווית y
-        # שמירה לקובץ זמני בזיכרון
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plt.close()
-    return send_file(img, mimetype='image/png')
+    try:
+        purchases = Purchase.query.all()
+        if not purchases:
+            raise ValueError("אין נתונים")
 
+        data = [{
+            'user_id': p.user_id,
+            'nameP': p.nameP,
+            'qty': p.qty,
+            'price': p.price,
+            'category': p.category,
+            'date': p.date.strftime("%Y-%m-%d")
+        } for p in purchases]
 
- # גרף 2 - סכום הוצאות לפי שבוע
+        df = pd.DataFrame(data)
+
+        category_sum = df.groupby('category')['qty'].sum()
+
+        plt.figure(figsize=(6, 6))
+        category_sum.plot.pie(autopct='%1.1f%%', startangle=90)
+        plt.title('התפלגות הוצאות לפי קטגוריה')
+        plt.ylabel('')
+
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+        return send_file(img, mimetype='image/png')
+
+    except Exception as e:
+        # מחזיר תמונה עם טקסט במקום שגיאה
+        plt.figure(figsize=(6, 3))
+        plt.text(0.5, 0.5, 'לא נמצאו נתונים להצגה', ha='center', va='center', fontsize=14)
+        plt.axis('off')
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+        return send_file(img, mimetype='image/png')
+
+    except Exception as e:
+        # ���������� ���������� ���� �������� ���������� ����������
+        plt.figure(figsize=(6, 3))
+        plt.text(0.5, 0.5, '���� ���������� ������������ ����������', ha='center', va='center', fontsize=14)
+        plt.axis('off')
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+        return send_file(img, mimetype='image/png')
+
 @app.route('/graph2')
 def graph2():
-    purchases=Purchase.query.all()
-    data=[{
-        'user_id': p.user_id,
-        'nameP': p.nameP,
-        'qty': p.qty,
-        'price': p.price,
-        'category': p.category,
-        'date': p.date.strftime("%Y-%m-%d")
-    }for p in purchases]
-    df=pd.DataFrame(data)
-    df['date'] = pd.to_datetime(df['date'])
-    # יצירת עמודת שבוע מתוך התאריך
-    df['week'] = df['date'].dt.isocalendar().week
-    df['year'] = df['date'].dt.year
+    try:
+        purchases = Purchase.query.all()
+        if not purchases:
+            raise ValueError("אין נתונים")
 
-    # סכום שבועי לפי שנה
-    weekly_sum = df.groupby(['year', 'week'])['price'].sum().reset_index()
+        data = [{
+            'user_id': p.user_id,
+            'nameP': p.nameP,
+            'qty': p.qty,
+            'price': p.price,
+            'category': p.category,
+            'date': p.date.strftime("%Y-%m-%d")
+        } for p in purchases]
 
-    # מיזוג שנה ושבוע לטובת הצגה נוחה
-    weekly_sum['label'] = weekly_sum['year'].astype(str) + '-שבוע ' + weekly_sum['week'].astype(str)
+        df = pd.DataFrame(data)
+        df['date'] = pd.to_datetime(df['date'])
+        df['week'] = df['date'].dt.isocalendar().week
+        df['year'] = df['date'].dt.year
 
-    # ציור גרף
-    plt.figure(figsize=(10, 5))
-    plt.bar(weekly_sum['label'], weekly_sum['price'], color='skyblue')
-    plt.xticks(rotation=45, ha='right')
-    plt.tight_layout()
-    plt.title('סך הוצאות לפי שבוע')
-    plt.xlabel('שבוע')
-    plt.ylabel('סכום הוצאות')
+        weekly_sum = df.groupby(['year', 'week'])['price'].sum().reset_index()
+        weekly_sum['label'] = weekly_sum['year'].astype(str) + '-שבוע ' + weekly_sum['week'].astype(str)
 
-    img = BytesIO()
-    plt.savefig(img, format='png')
-    img.seek(0)
-    plt.close()
-    return send_file(img, mimetype='image/png')
+        plt.figure(figsize=(10, 5))
+        plt.bar(weekly_sum['label'], weekly_sum['price'], color='skyblue')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.title('סך הוצאות לפי שבוע')
+        plt.xlabel('שבוע')
+        plt.ylabel('סכום הוצאות')
+
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+        return send_file(img, mimetype='image/png')
+
+    except Exception as e:
+        # במקרה של שגיאה – הצגת גרף עם טקסט בלבד
+        plt.figure(figsize=(6, 3))
+        plt.text(0.5, 0.5, 'לא נמצאו נתונים להצגה', ha='center', va='center', fontsize=14)
+        plt.axis('off')
+        img = BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+        return send_file(img, mimetype='image/png')
 
 @app.route('/demoProfile')
 def demo_profile():
@@ -288,34 +324,46 @@ def demo_profile():
 
 @app.route('/Shopping_cart/<id>')
 def Shopping_cart(id):
-    data = [
-        {'user_id': 1,'name': 'כדור','qty': 20,'price': 77.90,'category': 'משחקים','date': '2024-12-01'},
-        {'user_id': 1,'name': 'בובה','qty': 5,'price': 35.00,'category': 'צעצועים','date': '2024-12-15'},
-        {'user_id': 1,'name': 'מחברת','qty': 10,'price': 12.50,'category': 'לימודים','date': '2025-01-05'},
-        {'user_id': 1,'name': 'ספר','qty': 2,'price': 90.00,'category': 'לימודים','date': '2025-02-10'},
-        {'user_id': 1,'name': 'פאזל','qty': 3,'price': 48.00,'category': 'משחקים','date': '2025-02-25'},
-        {'user_id': 1,'name': 'בלונים','qty': 50,'price': 0.90,'category': 'מסיבות','date': '2025-03-01'}
-    ]
-       # יצירת DataFrame עם pandas
-    user_purchases = pd.DataFrame(data)
-    # שלב 1: פתיחת קובץ HTML וניתוחו
-    with open("templates/store.html", encoding="utf-8") as file:
-        soup = BeautifulSoup(file, 'html.parser')
-    # שלב 2: שליפת שמות ומחירים מהחנות
-    store_products = []
-    for product in soup.find_all("div", class_="product"):
-        name = product.find("span", class_="name").text.strip()
-        price = float(product.find("span", class_="price").text.strip())
-        store_products.append({'name': name, 'store_price': price})    
-        
-    store_df = pd.DataFrame(store_products)
-    # שלב 3: מיזוג הנתונים לפי שם המוצר
-    merged = pd.merge(user_purchases, store_df, on="name")
+    try:
+        data = [...]  # אותו כמו אצלך
 
-    # שלב 4: סינון רק של מוצרים שבהם המחיר בחנות זול יותר
-    better_deals = merged[merged['store_price'] < merged['price']]
-    to_print="מוצרים שהחנות מציעה במחיר זול יותר"
-    return render_template('store.html',better_deals=better_deals,to_print=to_print,id=id)
+        user_purchases = pd.DataFrame(data)
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))  # תיקיית הקובץ app.py
+        store_path = os.path.join(base_dir, 'templates', 'store.html')
+
+        with open(store_path, encoding="utf-8") as file:
+             soup = BeautifulSoup(file, 'html.parser')
+
+        store_products = []
+        for product in soup.find_all("div", class_="product"):
+            try:
+                name_tag = product.find("span", class_="name")
+                price_tag = product.find("span", class_="price")
+                if not name_tag or not price_tag:
+                   continue
+                name = name_tag.text.strip()
+                price_text = price_tag.text.strip().replace("₪", "").replace(",", "")
+                price = float(price_text)
+                store_products.append({'name': name, 'store_price': price})
+            except Exception as e:
+                print("שגיאה בפריט:", e)
+                continue
+
+        print("store_products:", store_products)
+
+        store_df = pd.DataFrame(store_products)
+        print("store_df.columns:", store_df.columns)
+
+        if store_df.empty or 'name' not in store_df.columns:
+             return "שגיאה: לא נמצאו מוצרים חוקיים בקובץ store.html", 500
+        merged = pd.merge(user_purchases, store_df, on="name")
+        better_deals = merged[merged['store_price'] < merged['price']]
+        to_print = "מוצרים שהחנות מציעה במחיר זול יותר"
+        return render_template('store.html', better_deals=better_deals, to_print=to_print, id=id)
+
+    except Exception as e:
+        return f"שגיאה פנימית: {str(e)}", 500
 
 if __name__== "__main__":  # הרצת האפליקציה
     app.run(debug=True)
